@@ -51,13 +51,9 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * All two of these values are immutable: they can only be set once during
      * construction.
      */
-    address contractDeployer;
-    uint txCharge = 1 // As we can't store decimals (1 = 1%)
-
     constructor(string memory name_, string memory symbol_) {
-    _name = name_;
-    _symbol = symbol_;
-    contractDeployer= msg.sender;
+        _name = name_;
+        _symbol = symbol_;
     }
 
     /**
@@ -115,12 +111,9 @@ contract ERC20 is Context, IERC20, IERC20Metadata {
      * - the caller must have a balance of at least `amount`.
      */
     function transfer(address to, uint256 amount) public virtual override returns (bool) {
-    address owner = _msgSender();
-    // Transfers 1% of the amount to send to the contract deployer (you)
-    _transfer(owner, contractDeployer, amount * 99 / 100); 
-    // Transfers the remaining 99% to the actual recipient
-    _transfer(owner, to, amount - (amount * 1/100);
-    return true;
+        address owner = _msgSender();
+        _transfer(owner, to, amount);
+        return true;
     }
 
     /**
